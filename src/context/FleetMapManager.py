@@ -69,18 +69,22 @@ class FleetMapManager(QObject):
         # Pick icon by vehicle type encoded in the topic
         if '/subsurface/' in vehicleTopic:
             svg = ':/custom_icons/auv_marker.svg'
+            size = 8
         elif '/surface/' in vehicleTopic:
             svg = ':/custom_icons/usv_marker.svg'
+            size = 8
         elif '/air/' in vehicleTopic:
-            svg = ':/custom_icons/uav_marker.svg'
+            svg = ':/custom_icons/uav_marker.svg' # can be improved!
+            size = 20
         else:
             svg = ':/custom_icons/vehicle_marker.svg'
+            size = 8
 
         symbol = QgsMarkerSymbol()
         symbol.deleteSymbolLayer(0)  # remove default circle
 
         svg_layer = QgsSvgMarkerSymbolLayer(svg)
-        svg_layer.setSize(8)
+        svg_layer.setSize(size)
         svg_layer.setSizeUnit(QgsUnitTypes.RenderMillimeters)
         svg_layer.setFillColor(color)
         svg_layer.setStrokeColor(color.darker(150))

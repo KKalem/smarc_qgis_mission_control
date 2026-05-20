@@ -112,10 +112,10 @@ class VehicleLiveViewWidget(QWidget):
                 self.ui.statusLabel.setText('Running')
             else:
                 self.ui.taskValueLabel.setText('-')
-                self.ui.statusLabel.setText('Other')
+                self.ui.statusLabel.setText('Idle')
         else:
             self.ui.taskValueLabel.setText('?')
-            self.ui.statusLabel.setText('Idle')
+            self.ui.statusLabel.setText('Other')
 
     @pyqtSlot(bool)
     def onShowOnMapChanged(self, state: bool):

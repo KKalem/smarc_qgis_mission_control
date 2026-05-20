@@ -18,5 +18,9 @@
         <file>custom_icons/upload-square-black-icon.svg</file>
         <file>custom_icons/upload-square-color-blue-icon.svg</file>
         <file>custom_icons/upload-square-color-red-icon.svg</file>
+        <file>custom_icons/vehicle_marker.svg</file>
+        <file>custom_icons/auv_marker.svg</file>
+        <file>custom_icons/uav_marker.svg</file>
+        <file>custom_icons/usv_marker.svg</file>
     </qresource>
 </RCC>
