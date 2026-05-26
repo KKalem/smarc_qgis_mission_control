@@ -331,8 +331,10 @@ class SmarcStopGeofenceTask(Task):
     type = TaskType.SMARC_STOP_GEOFENCE
 
     # Task parameters
-    reset_geofence: Annotated[bool, Column("ResetGeofence")] = True
-    reset_islands: Annotated[bool, Column("ResetIslands")] = True
+    reset_geofence: Annotated[bool, Column("ResetGeofence")] \
+        = True
+    reset_islands: Annotated[bool, Column("ResetIslands")] \
+        = True
 
     @classmethod
     def fromJson(cls, data: dict) -> 'SmarcStopGeofenceTask':
@@ -359,7 +361,8 @@ class SmarcWaitTask(Task):
     type = TaskType.SMARC_WAIT
 
     # Task parameters
-    timeout: Annotated[float, Unit("s"), Column("Timeout")] = 0.0
+    timeout: Annotated[float, Unit("s"), Column("Timeout")] \
+        = 0.0
 
     @classmethod
     def fromJson(cls, data: dict) -> 'SmarcWaitTask':
@@ -383,7 +386,8 @@ class SmarcLogTask(Task):
     type = TaskType.SMARC_LOG
 
     # Task parameters
-    log_str: Annotated[str, Column("LogStr")] = ""
+    log_str: Annotated[str, Column("LogStr")] \
+        = ""
 
     @classmethod
     def fromJson(cls, data: dict) -> 'SmarcLogTask':
@@ -410,9 +414,12 @@ class GimbalSetRPYTask(Task):
     type = TaskType.GIMBAL_SET_RPY
 
     # Task parameters
-    roll: Annotated[float, Unit("°"), Column("Roll")] = 0.0
-    pitch: Annotated[float, Unit("°"), Column("Pitch")] = 0.0
-    yaw: Annotated[float, Unit("°"), Column("Yaw")] = 0.0
+    roll: Annotated[float, Unit("°"), Column("Roll")] \
+        = 0.0
+    pitch: Annotated[float, Unit("°"), Column("Pitch")] \
+        = 0.0
+    yaw: Annotated[float, Unit("°"), Column("Yaw")] \
+        = 0.0
 
     @classmethod
     def fromJson(cls, data: dict) -> 'GimbalSetRPYTask':
