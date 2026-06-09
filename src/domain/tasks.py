@@ -98,6 +98,15 @@ class TaskRegistry:
         if prevCls:
             raise ValueError(f"Duplicate task type '{taskCls.type}' for "
                              f"{taskCls.__name__} and {prevCls.__name__}")
+        
+        if taskCls.__dict__.get("waypointClass") and not \
+            (issubclass(taskCls, SingleWaypointTask) or issubclass(taskCls, MultiWaypointTask)):
+            raise TypeError(f"Task class {taskCls.__name__} defines a waypointClass, but it is not a SingleWaypointTask subclass!")
+        
+        if issubclass(taskCls, SingleWaypointTask) or issubclass(taskCls, MultiWaypointTask):
+            if not taskCls.__dict__.get("waypointClass"):
+                raise TypeError(f"Task class {taskCls.__name__} is a SingleWaypointTask or MultiWaypointTask subclass, but does not define a waypointClass!")
+        
         cls.registry[taskCls.type] = taskCls
 
         return taskCls
@@ -304,7 +313,7 @@ class CustomTask(Task):
 #### Geofence Tasks ####
 @TaskRegistry.register
 @dataclass
-class SmarcStartGeofenceTask(Task):
+class SmarcStartGeofenceTask(MultiWaypointTask):
     type          = TaskType.SMARC_START_GEOFENCE
     waypointClass = GeoPoint
 
@@ -553,9 +562,9 @@ class AlarsReleaseControlTask(Task):
 
 @TaskRegistry.register
 @dataclass
-class AlarsBTTask(Task):
+class AlarsBTTask(SingleWaypointTask):
     type = TaskType.ALARS_BT
-    waypointsClass = GeoPoint
+    waypointClass = GeoPoint
 
     # Task parameters
     num_retries: Annotated[int, Column("#Retries")] \
@@ -598,7 +607,7 @@ class AlarsBTTask(Task):
 
 @TaskRegistry.register
 @dataclass
-class AlarsSearchTask(Task):
+class AlarsSearchTask(SingleWaypointTask):
     type = TaskType.ALARS_SEARCH
     waypointClass = GeoPoint
 
