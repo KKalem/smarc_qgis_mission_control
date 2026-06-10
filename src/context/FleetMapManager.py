@@ -114,6 +114,13 @@ class FleetMapManager(QObject):
             symbol = self._createVehicleSymbol(vehicleTopic, state.mapColor)
 
             category = QgsRendererCategory(vehicleTopic, symbol, vehicleTopic, True) # default render state off/false
+            
+            # do not explode if the layer doesnt exist...
+            if self._waypointLayer is None:
+                print("Error: Waypoint layer not initialized")
+            renderer = self._waypointLayer.renderer()
+            if renderer is None:
+                print("Error: Waypoint layer has no renderer")
             self._waypointLayer.renderer().addCategory(category)
 
             vehicle = VehicleMapObject(
@@ -127,6 +134,10 @@ class FleetMapManager(QObject):
         state = self._fleetState.vehicleState(vehicleTopic)
         if state is None:
             # TODO: invalid mapping
+            return
+
+        if vehicleTopic not in self._vehicles: 
+            # update probably ran before discovery, ignore...
             return
 
         vehicle = self._vehicles[vehicleTopic]
@@ -188,6 +199,8 @@ class FleetMapManager(QObject):
 
     @pyqtSlot(str)
     def onLookAtRequested(self, vehicleTopic: str):
+        if vehicleTopic not in self._vehicles: return
+
         vehicle = self._vehicles.get(vehicleTopic)
         if vehicle is None or vehicle.lastFid is None:
             return
