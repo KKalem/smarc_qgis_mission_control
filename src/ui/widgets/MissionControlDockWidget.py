@@ -53,6 +53,9 @@ class MissionControlDockWidget(QgsDockWidget):
         self.ui.tabFleetControl.emergencyRequested.connect(
             self._fleetContext.mqtt.onEmergencySignal
         )
+        self.ui.tabFleetControl.resetEmergencyRequested.connect(
+            self._fleetContext.mqtt.onResetEmergencySignal
+        )
         self.ui.tabWidget.addTab(self.ui.tabFleetControl, "")
 
         self.ui.tabLiveView = LiveViewWidget(
