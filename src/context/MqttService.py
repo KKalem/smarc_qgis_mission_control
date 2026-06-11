@@ -267,6 +267,7 @@ class MqttService(QObject):
         }
         self._client.publish(topic, json.dumps(data))
 
+    @pyqtSlot(set)
     def onResetEmergencySignal(self, vehicleTopics: set[str]):
         if self._client is None:
             # TODO
@@ -283,6 +284,54 @@ class MqttService(QObject):
         data = {
             'receiver': receiver,
             'signal': '$cancel_abort',
+            'unit': f'/{receiver}',
+            'command': 'signal-unit',
+            'com-uuid': str(uuid4()),
+            'sender': 'QGIS-MissionControl',
+        }
+        self._client.publish(topic, json.dumps(data))
+
+    @pyqtSlot(set)
+    def onSkipTaskSignal(self, vehicleTopics: set[str]):
+        if self._client is None:
+            # TODO
+            return
+        for vehicleTopic in vehicleTopics:
+            self.publishSkipTaskSignal(vehicleTopic)
+
+    def publishSkipTaskSignal(self, vehicleTopic: str):
+        if self._client is None:
+            # TODO
+            return
+        topic = f'{vehicleTopic}/tst/command'
+        receiver = vehicleTopic.split('/')[-1]
+        data = { # TODO: currently performs the same action as abortMission!
+            'receiver': receiver,
+            'signal': '$enough',
+            'unit': f'/{receiver}',
+            'command': 'signal-unit',
+            'com-uuid': str(uuid4()),
+            'sender': 'QGIS-MissionControl',
+        }
+        self._client.publish(topic, json.dumps(data))
+
+    @pyqtSlot(set)
+    def onAbortMissionSignal(self, vehicleTopics: set[str]):
+        if self._client is None:
+            # TODO
+            return
+        for vehicleTopic in vehicleTopics:
+            self.publishAbortMissionSignal(vehicleTopic)
+
+    def publishAbortMissionSignal(self, vehicleTopic: str):
+        if self._client is None:
+            # TODO
+            return
+        topic = f'{vehicleTopic}/tst/command'
+        receiver = vehicleTopic.split('/')[-1]
+        data = {
+            'receiver': receiver,
+            'signal': '$enough',
             'unit': f'/{receiver}',
             'command': 'signal-unit',
             'com-uuid': str(uuid4()),

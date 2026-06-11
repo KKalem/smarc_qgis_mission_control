@@ -50,6 +50,13 @@ class MissionControlDockWidget(QgsDockWidget):
                 receivers
             )
         )
+        self.ui.tabFleetControl.skipTaskRequested.connect(
+            self._fleetContext.mqtt.onSkipTaskSignal
+        )
+
+        self.ui.tabFleetControl.abortMissionRequested.connect(
+            self._fleetContext.mqtt.onAbortMissionSignal
+        )
         self.ui.tabFleetControl.emergencyRequested.connect(
             self._fleetContext.mqtt.onEmergencySignal
         )
