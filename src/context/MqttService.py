@@ -266,3 +266,26 @@ class MqttService(QObject):
             'sender': 'QGIS-MissionControl',
         }
         self._client.publish(topic, json.dumps(data))
+
+    def onResetEmergencySignal(self, vehicleTopics: set[str]):
+        if self._client is None:
+            # TODO
+            return
+        for vehicleTopic in vehicleTopics:
+            self.publishResetEmergencySignal(vehicleTopic)
+
+    def publishResetEmergencySignal(self, vehicleTopic: str):
+        if self._client is None:
+            # TODO
+            return
+        topic = f'{vehicleTopic}/tst/command'
+        receiver = vehicleTopic.split('/')[-1]
+        data = {
+            'receiver': receiver,
+            'signal': '$cancel_abort',
+            'unit': f'/{receiver}',
+            'command': 'signal-unit',
+            'com-uuid': str(uuid4()),
+            'sender': 'QGIS-MissionControl',
+        }
+        self._client.publish(topic, json.dumps(data))

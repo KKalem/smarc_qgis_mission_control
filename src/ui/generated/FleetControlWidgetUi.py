@@ -67,7 +67,7 @@ class Ui_FleetControlWidget(object):
         self.vehicleListScrollArea.setWidgetResizable(True)
         self.vehicleListScrollArea.setObjectName("vehicleListScrollArea")
         self.vehicleList = QtWidgets.QWidget()
-        self.vehicleList.setGeometry(QtCore.QRect(0, 0, 573, 640))
+        self.vehicleList.setGeometry(QtCore.QRect(0, 0, 573, 639))
         self.vehicleList.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.vehicleList.setObjectName("vehicleList")
         self.vehicleListVLayout = QtWidgets.QVBoxLayout(self.vehicleList)
@@ -158,19 +158,22 @@ class Ui_FleetControlWidget(object):
 "            ")
         self.emergencyButton.setObjectName("emergencyButton")
         self.horizontalLayout_2.addWidget(self.emergencyButton)
-        self.cancelAbortButton = QtWidgets.QPushButton(self.vehicleControls)
+        self.resetEmergencyButton = QtWidgets.QPushButton(self.vehicleControls)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.cancelAbortButton.sizePolicy().hasHeightForWidth())
-        self.cancelAbortButton.setSizePolicy(sizePolicy)
-        self.cancelAbortButton.setStyleSheet(":enabled {\n"
+        sizePolicy.setHeightForWidth(self.resetEmergencyButton.sizePolicy().hasHeightForWidth())
+        self.resetEmergencyButton.setSizePolicy(sizePolicy)
+        self.resetEmergencyButton.setStyleSheet(":enabled {\n"
 "  background-color: #d4edda;\n"
 "  color: black;\n"
 "  font-weight: bold;\n"
 "}")
-        self.cancelAbortButton.setObjectName("cancelAbortButton")
-        self.horizontalLayout_2.addWidget(self.cancelAbortButton)
+        icon9 = QtGui.QIcon()
+        icon9.addPixmap(QtGui.QPixmap(":/custom_icons/system.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.resetEmergencyButton.setIcon(icon9)
+        self.resetEmergencyButton.setObjectName("resetEmergencyButton")
+        self.horizontalLayout_2.addWidget(self.resetEmergencyButton)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.verticalLayout_2.addWidget(self.vehicleControls)
 
@@ -199,6 +202,6 @@ class Ui_FleetControlWidget(object):
         self.abortMissionButton.setToolTip(_translate("FleetControlWidget", "Abort mission"))
         self.emergencyButton.setToolTip(_translate("FleetControlWidget", "Emergency"))
         self.emergencyButton.setText(_translate("FleetControlWidget", "EMERGENCY"))
-        self.cancelAbortButton.setToolTip(_translate("FleetControlWidget", "Cancel \"abort\""))
-        self.cancelAbortButton.setText(_translate("FleetControlWidget", "cancelAbort"))
+        self.resetEmergencyButton.setToolTip(_translate("FleetControlWidget", "Reset emergency"))
+        self.resetEmergencyButton.setText(_translate("FleetControlWidget", "RESET"))
 from . import resources_rc

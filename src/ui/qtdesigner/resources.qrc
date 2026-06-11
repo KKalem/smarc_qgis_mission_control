@@ -22,5 +22,6 @@
         <file>custom_icons/auv_marker.svg</file>
         <file>custom_icons/uav_marker.svg</file>
         <file>custom_icons/usv_marker.svg</file>
+        <file>custom_icons/system.svg</file>
     </qresource>
 </RCC>

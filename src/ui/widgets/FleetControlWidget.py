@@ -1,5 +1,6 @@
 from qgis.PyQt.QtCore import Qt, pyqtSlot, pyqtSignal, QTimer
 from qgis.PyQt.QtWidgets import QWidget, QFrame
+from qgis.core import QgsApplication
 
 from ...context.FleetState import FleetState
 from ..generated.FleetControlWidgetUi import Ui_FleetControlWidget
@@ -20,6 +21,7 @@ class FleetControlWidget(QFrame):
     continueRequested = pyqtSignal(set)
     abortMissionRequested = pyqtSignal(set)
     emergencyRequested = pyqtSignal(set)
+    resetEmergencyRequested = pyqtSignal(set)
 
     def __init__(self, fleetState: FleetState, mapManager, parent: QWidget | None = None):
         super().__init__(parent)
@@ -72,6 +74,7 @@ class FleetControlWidget(QFrame):
         self.ui.continueButton.clicked.connect(self.onContinueClicked)
         self.ui.abortMissionButton.clicked.connect(self.onAbortMissionButtonClicked)
         self.ui.emergencyButton.clicked.connect(self.onEmergencyButtonClicked)
+        self.ui.resetEmergencyButton.clicked.connect(self.onResetEmergencyButtonClicked)
 
         # Heartbeat
         self._fleetState.vehicleHeartbeat.connect(self.onVehicleHeartbeat)
@@ -185,6 +188,10 @@ class FleetControlWidget(QFrame):
             x = ABORT_MISSION_BUTTON_CLICKS_REQUIRED - self._abortMissionClickCounter
             self.ui.abortMissionButton.setText(f"Abort Mission ({x})")
             self._abortMissionButtonTimer.start()
+
+    @pyqtSlot()
+    def onResetEmergencyButtonClicked(self):
+        self.resetEmergencyRequested.emit(self._selected)
 
     def _resetEmergencyClickCount(self):
         self._emergencyButtonTimer.stop()
