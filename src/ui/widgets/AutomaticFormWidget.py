@@ -38,7 +38,12 @@ class AutomaticFormWidget(QWidget):
             field = self.createEditorWidget(form, spec.type())
             self._formLayout.setWidget(col, QFormLayout.FieldRole, field)
 
-            self._mapper.addMapping(field, col)
+            if issubclass(spec.type(), Enum):
+                self._mapper.addMapping(field, col, b"currentText")
+                # field.editTextChanged.connect(self._mapper.submit) # connects on field change (not suitable for manual keyboard input)
+                field.lineEdit().editingFinished.connect(self._mapper.submit) # connects on fiel change (enter/focus out)
+            else:
+                self._mapper.addMapping(field, col)
 
         self._mapper.toFirst()
 
@@ -56,6 +61,7 @@ class AutomaticFormWidget(QWidget):
             widget = QComboBox(parent)
             for option in t:
                 widget.addItem(str(option))
+            widget.setEditable(True)
             return widget
         elif t is str:
             widget = QLineEdit(parent)

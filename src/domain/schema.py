@@ -54,6 +54,11 @@ class FieldSpec:
         return getattr(obj, self.name)
 
     def setValue(self, obj: object, value: Any):
+        if issubclass(self.baseType, Enum):
+            try:
+                value = self.baseType(value)
+            except ValueError: # TODO: enum classes still required though?
+                pass # do nothing if entry not a named enum member
         setattr(obj, self.name, value)
 
 # TODO: cache somehow
