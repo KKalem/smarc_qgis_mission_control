@@ -54,6 +54,8 @@ class FieldSpec:
         return getattr(obj, self.name)
 
     def setValue(self, obj: object, value: Any):
+        if issubclass(self.baseType, Enum):
+            value = self.baseType(value)
         setattr(obj, self.name, value)
 
 # TODO: cache somehow
