@@ -56,7 +56,6 @@ class SchemaBasedModel(ItemBasedModel): # TODO: integrate with undo/redo stack
         # cast the incoming object to the original type # TODO: move type checks to MissionDocument after undo/redo stack implementation
         try:
             typed_value = spec.type()(value) # instead of type(original)(value)
-            
         except (ValueError, TypeError):
             return False  # reject invalid input
 
