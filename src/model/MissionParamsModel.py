@@ -43,8 +43,10 @@ class MissionParamsModel(SchemaBasedModel):
         original = spec.value(self._doc.plan)
 
         # cast the incoming object to the original type
+        # TODO: move conversion to MissionDocument.setMissionField?
         try:
-            typed_value = type(original)(value)
+            typed_value = spec.type()(value) # instead of type(original)(value)
+        
         except (ValueError, TypeError):
             return False  # reject invalid input
 

@@ -6,7 +6,7 @@ from .ItemBasedModel import ItemBasedModel
 
 __all__ = ["SchemaBasedModel"]
 
-class SchemaBasedModel(ItemBasedModel):
+class SchemaBasedModel(ItemBasedModel): # TODO: integrate with undo/redo stack
     _schema: Schema
     _longHeaders: bool
 
@@ -53,9 +53,10 @@ class SchemaBasedModel(ItemBasedModel):
         # retrieve original value (->type)
         original = spec.value(item)
 
-        # cast the incoming object to the original type
+        # cast the incoming object to the original type # TODO: move type checks to MissionDocument after undo/redo stack implementation
         try:
-            typed_value = type(original)(value)
+            typed_value = spec.type()(value) # instead of type(original)(value)
+            
         except (ValueError, TypeError):
             return False  # reject invalid input
 
