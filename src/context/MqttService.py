@@ -123,7 +123,7 @@ class MqttService(QObject):
         if reason_code == 0:
             print("MQTT connected successfully")
             print("subscribing to context:", self._context)
-            client.subscribe(self._context)
+            client.subscribe(f"{self._context}/#")
 
             self._connected = True
             self.connectionStateChanged.emit(MqttConnectionState.CONNECTED)
