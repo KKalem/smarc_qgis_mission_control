@@ -63,6 +63,10 @@ class TaskType(StrEnum):
     ALARS_RECOVER = "alars-recover"
     ALARS_FOLLOW_AUV = "alars-follow-auv"
 
+    # succorfish ping tasks
+    SMARC_MODEM_PING = "smarc-modem-ping"
+    SMARC_STOP_MODEM_PING = "smarc-stop-modem-ping"
+
 
 @dataclass
 class Task(SchemaMixin):
@@ -151,6 +155,13 @@ class MovementSpeedParam(StrEnum):
     SLOW     = "slow"
     STANDARD = "standard"
     FAST     = "fast"
+
+class SuccorModeParam(StrEnum):
+    # as defined in utilities/serial_ping_pkg/.../modem_ping_estimator_node
+    ADD = "add"
+    REMOVE = "remove"
+    CLEAR = "clear"
+    PING = "ping"
 
 @TaskRegistry.register
 @dataclass
@@ -757,4 +768,68 @@ class DeployPayloadAtTask(SingleWaypointTask):
                 "waypoint": self.waypoint.toJson(),
                 "unit": str(self.payload)
             }
+        }
+    
+
+# Succorfish stuff
+@TaskRegistry.register
+@dataclass
+class SmarcModemPingTask(Task):
+    type = TaskType.SMARC_MODEM_PING
+
+    # Task parameters
+    # one of: add, remove, clear, ping
+    mode: Annotated[SuccorModeParam, Column("Mode")] \
+        = SuccorModeParam.PING
+    modem_id: Annotated[int, Column("ModemID")] \
+        = 222
+    depth_m: Annotated[float, Unit("m"), Column("Depth")] \
+        = 0.0    
+    retry_count: Annotated[int, Column("RetryCount")] \
+        = 3
+    task_timeout_s: Annotated[float, Unit("s"), Column("TaskTimeout")] \
+        = 30
+    
+
+    @classmethod
+    def fromJson(cls, data: dict) -> 'SmarcModemPingTask':
+        assert(data["name"] == str(cls.type))
+        return cls(
+            description = str(data["description"]),
+            uuid = UUID(data["task-uuid"]),
+            mode = SuccorModeParam(data["params"]["mode"]),
+            modem_id = int(data["params"]["modem_id"]),
+            depth_m = float(data["params"]["depth_m"]),
+            retry_count = int(data["params"]["retry_count"]),
+            task_timeout_s = float(data["params"]["task_timeout_s"])
+        )
+
+    def toJson(self) -> dict:
+        return super().toJson() | {
+            "params": {
+                "mode": self.mode.value,
+                "modem_id": self.modem_id,
+                "depth_m": self.depth_m,
+                "retry_count": self.retry_count,
+                "task_timeout_s": self.task_timeout_s
+            }
+        }
+    
+
+@TaskRegistry.register
+@dataclass
+class SmarcStopModemPingTask(Task):
+    type = TaskType.SMARC_STOP_MODEM_PING
+
+    @classmethod
+    def fromJson(cls, data: dict) -> 'SmarcStopModemPingTask':
+        assert(data["name"] == str(cls.type))
+        return cls(
+            description = str(data["description"]),
+            uuid = UUID(data["task-uuid"])
+        )
+
+    def toJson(self) -> dict:
+        return super().toJson() | {
+            "params": {}
         }
